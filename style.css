@@ -1,13 +1,10 @@
-/* Segnale: esempio completo della consegna su Home e Programma. */
-
-/* Valori condivisi: le regole interessate li richiamano con var(). */
 :root {
-  --colore-primario: #234c78;
-  --colore-primario-scuro: #163454;
-  --colore-sfondo: #f5f2e9;
-  --colore-testo: #202923;
-  --font-testo: Arial, Helvetica, sans-serif;
-  --font-titoli: Georgia, "Times New Roman", serif;
+  --colore-primario: #526043;
+  --colore-primario-scuro: #3B5249;
+  --colore-sfondo: #E2E6DB;
+  --colore-testo: #34252F;
+  --font-testo: "Inter", Arial, Helvetica, sans-serif;
+  --font-titoli: "MADE Soulmaze", Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -24,7 +21,7 @@ body {
 }
 
 a {
-  color: var(--colore-primario);
+  color: var(--colore-primario-scuro);
 }
 
 a:hover {
@@ -33,6 +30,7 @@ a:hover {
 
 a:focus {
   outline: 3px solid var(--colore-testo);
+  outline-offset: 3px;
 }
 
 .container {
@@ -42,8 +40,12 @@ a:focus {
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   padding: 1.25rem 0;
   border-bottom: 4px solid var(--colore-primario);
+  background: var(--colore-sfondo);
 }
 
 .brand {
@@ -62,13 +64,17 @@ a:focus {
   font-weight: normal;
 }
 
+/* Sotto i 600 px: collegamenti in colonna. */
 nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 
 nav a {
-  display: inline-block;
-  margin-right: 1rem;
+  display: block;
   padding: 0.25rem 0;
 }
 
@@ -78,7 +84,7 @@ nav a {
 
 .eyebrow,
 .event-meta {
-  color: #46564b;
+  color: var(--colore-primario-scuro);
   font-size: 0.875rem;
   font-weight: bold;
 }
@@ -118,15 +124,27 @@ h3 {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.75rem 1.25rem;
+  border: 2px solid var(--colore-primario);
   border-radius: 0.5rem;
   background: var(--colore-primario);
   color: #ffffff;
   font-weight: bold;
+  text-align: center;
   text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .button-link:hover {
+  border-color: var(--colore-primario-scuro);
   background: var(--colore-primario-scuro);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.button-link:focus-visible {
+  outline: 3px solid var(--colore-testo);
+  outline-offset: 3px;
 }
 
 .content-section {
@@ -176,7 +194,7 @@ h3 {
 
 .event-card {
   overflow: hidden;
-  border: 1px solid #b7c0b7;
+  border: 1px solid var(--colore-primario-scuro);
   border-radius: 0.75rem;
   background: #ffffff;
 }
@@ -193,14 +211,14 @@ h3 {
 
 .event-place {
   margin-bottom: 0;
-  color: #46564b;
+  color: var(--colore-primario-scuro);
   font-size: 0.875rem;
 }
 
 .site-footer {
   padding: 1.25rem 0;
-  border-top: 1px solid #b7c0b7;
-  color: #46564b;
+  border-top: 1px solid var(--colore-primario-scuro);
+  color: var(--colore-primario-scuro);
   font-size: 0.875rem;
 }
 
@@ -217,14 +235,21 @@ h3 {
   top: 1rem;
 }
 
-/* Da 600 px: due colonne. */
+/* Da 600 px: collegamenti in riga e griglia degli eventi a due colonne. */
 @media (min-width: 600px) {
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .event-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Da 1024 px: tre colonne. */
+/* Da 1024 px: griglia degli eventi a tre colonne. */
 @media (min-width: 1024px) {
   .event-grid {
     grid-template-columns: repeat(3, 1fr);
