@@ -19,11 +19,13 @@
   <header class="site-header">
     <div class="container">
       <a class="brand" href="index.html">Segnale<span>Festival di design</span></a>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="programma.html">Programma</a>
-        <a href="info.html" aria-current="page">Info e luoghi</a>
-      </nav>
+     <nav class="menu">
+  <a href="index.html">Home</a>
+  <a href="programma.html">Programma</a>
+  <a href="info.html">Info e luoghi</a>
+</nav>
+
+
     </div>
   </header>
 
@@ -104,7 +106,33 @@
         </a>
       </p>
 
-      <p class="reading-text">Festival, sedi ed eventi sono inventati per questa esercitazione. Non rappresentano un evento reale.</p>
+      <p class="reading-text">
+        Festival, sedi ed eventi sono inventati per questa esercitazione. Non rappresentano un evento reale.
+      </p>
+    </section>
+
+    <section class="content-section" aria-labelledby="titolo-meteo">
+      <h2 id="titolo-meteo">Meteo a Torino adesso</h2>
+
+      <p id="stato-meteo" class="reading-text" role="status" aria-live="polite">
+        Caricamento dei dati meteo…
+      </p>
+
+      <div id="dati-meteo" hidden>
+        <p>Temperatura: <span id="meteo-temperatura"></span></p>
+        <p>Vento: <span id="meteo-vento"></span></p>
+        <p>Ora del dato: <time id="meteo-ora"></time></p>
+      </div>
+
+      <p class="reading-text">
+        Questo è il meteo di oggi a Torino, non una previsione per le date del festival.
+      </p>
+
+      <p class="reading-text">
+        Dati meteo:
+        <a href="https://open-meteo.com/">Open-Meteo</a>,
+        licenza <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+      </p>
     </section>
   </main>
 
@@ -116,13 +144,54 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/14.4.0/swiper-bundle.min.js"></script>
   <script>
-    new Swiper('.venue-swiper', {
+    new Swiper(".venue-swiper", {
       slidesPerView: 1,
       navigation: {
-        prevEl: '.swiper-button-prev',
-        nextEl: '.swiper-button-next'
+        prevEl: ".swiper-button-prev",
+        nextEl: ".swiper-button-next"
       }
     });
+  </script>
+
+  <script>
+    async function caricaMeteo() {
+      const stato = document.querySelector("#stato-meteo");
+      const dati = document.querySelector("#dati-meteo");
+
+      try {
+        const risposta = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=45.0703&longitude=7.6869&current=temperature_2m,wind_speed_10m&timezone=Europe%2FRome"
+        );
+
+        if (!risposta.ok) {
+          throw new Error("La richiesta meteo non è riuscita.");
+        }
+
+        const meteo = await risposta.json();
+
+        if (!meteo.current || !meteo.current_units) {
+          throw new Error("La risposta meteo non contiene i dati attesi.");
+        }
+
+        document.querySelector("#meteo-temperatura").textContent =
+          `${meteo.current.temperature_2m} ${meteo.current_units.temperature_2m}`;
+
+        document.querySelector("#meteo-vento").textContent =
+          `${meteo.current.wind_speed_10m} ${meteo.current_units.wind_speed_10m}`;
+
+        const ora = document.querySelector("#meteo-ora");
+        ora.textContent = meteo.current.time.replace("T", " ");
+        ora.dateTime = meteo.current.time;
+
+        dati.hidden = false;
+        stato.textContent = "";
+      } catch (errore) {
+        console.error("Errore nel caricamento del meteo:", errore);
+        stato.textContent = "I dati meteo non sono al momento disponibili.";
+      }
+    }
+
+    caricaMeteo();
   </script>
 </body>
 </html>

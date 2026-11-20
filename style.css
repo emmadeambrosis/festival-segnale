@@ -64,18 +64,20 @@ a:focus {
   font-weight: normal;
 }
 
-/* Sotto i 600 px: collegamenti in colonna. */
+/* I collegamenti restano sempre sulla stessa riga. */
 nav {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: clamp(0.5rem, 3vw, 1rem);
   margin-top: 1rem;
 }
 
 nav a {
-  display: block;
+  display: inline-block;
   padding: 0.25rem 0;
+  white-space: nowrap;
 }
 
 .intro {
@@ -235,15 +237,8 @@ h3 {
   top: 1rem;
 }
 
-/* Da 600 px: collegamenti in riga e griglia degli eventi a due colonne. */
+/* Da 600 px: la griglia degli eventi passa a due colonne. */
 @media (min-width: 600px) {
-  nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
-  }
-
   .event-grid {
     grid-template-columns: repeat(2, 1fr);
   }
